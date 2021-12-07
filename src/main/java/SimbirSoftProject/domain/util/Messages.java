@@ -18,9 +18,7 @@ public class Messages {
 
     public Date updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contents_id", nullable = false)
-    private Contents content;
+    public String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

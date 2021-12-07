@@ -1,6 +1,5 @@
 package SimbirSoftProject.domain.dto;
 
-import SimbirSoftProject.domain.util.Contents;
 import SimbirSoftProject.domain.util.Room;
 import SimbirSoftProject.domain.util.User;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ public class MessageDto {
     private long id;
     public Date createdAt;
     public Date updatedAt;
-    private Contents content;
+    public String content;
     private User toId;
     private User fromId;
     private Room roomId;
