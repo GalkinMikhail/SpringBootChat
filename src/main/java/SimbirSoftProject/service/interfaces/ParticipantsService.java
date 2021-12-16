@@ -1,12 +1,13 @@
 package SimbirSoftProject.service.interfaces;
 
-import SimbirSoftProject.domain.util.Participants;
+import SimbirSoftProject.controller.dto.ParticipantsDto;
+import SimbirSoftProject.entity.Participants;
 
 import java.util.List;
 
 public interface ParticipantsService {
-    String addParticipant(Participants participants);
+    String addParticipant(ParticipantsDto participantsDto);
     List<Participants> getAll();
-    String deleteParticipant(Participants participants);
-    Participants getParticipantById(Long id);
+    String deleteParticipantById(Long id);
+//    Participants getParticipantById(Long id);
 }

@@ -1,28 +1,39 @@
 package SimbirSoftProject.service.implement;
 
-import SimbirSoftProject.domain.dto.MessageDto;
-import SimbirSoftProject.domain.util.Messages;
+import SimbirSoftProject.controller.dto.MessageDto;
+import SimbirSoftProject.entity.Messages;
+import SimbirSoftProject.repository.MessageRepository;
 import SimbirSoftProject.service.interfaces.MessagesService;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
+@Service
 public class MessageServiceImpl implements MessagesService {
+
+    private final MessageRepository messageRepository;
     @Override
-    public ResponseEntity<MessageDto> createMessage(MessageDto messageDto) {
-        return null;
+    public String createMessage(MessageDto messageDto) {
+        messageRepository.save(messageDto.messagesDtoTomMessage(messageDto));
+        return "";
     }
 
     @Override
     public Messages getMessageById(Long id) {
-        return null;
+        return messageRepository.getById(id);
     }
 
     @Override
     public String deleteMessageById(Long id) {
-        return null;
+        messageRepository.deleteById(id);
+        return "Message was deleted successfully";
     }
 
     @Override
     public String updateMessage(Long id) {
-        return null;
+        Messages messages = messageRepository.getById(id);
+        messageRepository.deleteById(id);
+        messageRepository.save(messages);
+        return "Message updated successfully";
     }
 }

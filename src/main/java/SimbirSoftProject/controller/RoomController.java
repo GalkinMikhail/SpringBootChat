@@ -1,26 +1,24 @@
 package SimbirSoftProject.controller;
 
-import SimbirSoftProject.domain.dto.RoomDto;
-import SimbirSoftProject.domain.util.Room;
+import SimbirSoftProject.controller.dto.RoomDto;
+import SimbirSoftProject.entity.Room;
 import SimbirSoftProject.service.interfaces.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/room")
+@RequiredArgsConstructor
 public class RoomController {
 
     private final RoomService roomService;
-    @Autowired
-    public RoomController(RoomService roomService){
-        this.roomService = roomService;
-    }
     @PostMapping("/create")
-    public String createRoom(@RequestBody RoomDto roomDto){
+    public ResponseEntity<String> createRoom(@RequestBody RoomDto roomDto){
         roomService.createRoom(roomDto);
-        return "Room created successfully";
+        return ResponseEntity.ok("Room created successfully");
     }
     @GetMapping("/get/{id}")
     public Room getRoomById(@PathVariable Long id){
@@ -31,12 +29,12 @@ public class RoomController {
         return roomService.getAllRooms();
     }
     @GetMapping("/get/type")
-    public String getRoomType(@RequestBody Room room){
-        return roomService.getRoomType(room);
+    public String getRoomType(@PathVariable Long id){
+        return roomService.getRoomType(id);
     }
     @DeleteMapping("/delete/{id}")
-    public String deleteRoomById(@PathVariable Long id){
+    public ResponseEntity<String> deleteRoomById(@PathVariable Long id){
         roomService.deleteRoomById(id);
-        return "Room deleted successfully";
+        return ResponseEntity.ok("Room deleted successfully");
     }
 }

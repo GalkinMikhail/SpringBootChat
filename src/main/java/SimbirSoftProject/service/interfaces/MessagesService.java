@@ -1,12 +1,11 @@
 package SimbirSoftProject.service.interfaces;
 
-import SimbirSoftProject.domain.dto.MessageDto;
-import SimbirSoftProject.domain.util.Messages;
-import org.springframework.http.ResponseEntity;
+import SimbirSoftProject.controller.dto.MessageDto;
+import SimbirSoftProject.entity.Messages;
 
 public interface MessagesService {
 
-    ResponseEntity<MessageDto> createMessage(MessageDto messageDto);
+    String createMessage(MessageDto messageDto);
     Messages getMessageById(Long id);
     String deleteMessageById(Long id);
     String updateMessage(Long id);

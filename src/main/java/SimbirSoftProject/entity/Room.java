@@ -1,16 +1,17 @@
-package SimbirSoftProject.domain.util;
+package SimbirSoftProject.entity;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "room")
+@NoArgsConstructor
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +20,10 @@ public class Room {
     @Size(max = 30, message = "Room name is too long")
     private String name;
 
-    @ElementCollection(targetClass = RoomType.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "room_type", joinColumns = @JoinColumn(name = "room_id"))
     @Enumerated(EnumType.STRING)
-    private Set<RoomType> type;
+    private RoomType type;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",nullable = false)
-    private User userIdCreator;
-
-    public Room(){
-
-    }
+    private User user_id_creator;
 }

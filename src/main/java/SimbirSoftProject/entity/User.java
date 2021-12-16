@@ -1,6 +1,8 @@
-package SimbirSoftProject.domain.util;
+package SimbirSoftProject.entity;
 
+import SimbirSoftProject.entity.Role;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "user")
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +31,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-
     @NotBlank(message = "Firstname cannot be empty")
     private String firstName;
 
@@ -36,15 +38,13 @@ public class User {
     @NotBlank(message = "Lastname cannot be empty")
     private String lastName;
 
-    private boolean isUserOnline;
+    private boolean is_user_online;
 
-    private boolean isBlocked;
+    private boolean is_blocked;
 
-    private Date blockDate;
+    @Temporal(TemporalType.DATE)
+    private Date block_date;
 
-    private Date blockingDuration;
-
-    public User(){
-
-    }
+    @Temporal(TemporalType.DATE)
+    private Date blocking_duration;
 }

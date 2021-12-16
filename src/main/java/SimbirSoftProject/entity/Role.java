@@ -1,4 +1,5 @@
-package SimbirSoftProject.domain.util;
+package SimbirSoftProject.entity;
+
 
 public enum Role {
     USER,

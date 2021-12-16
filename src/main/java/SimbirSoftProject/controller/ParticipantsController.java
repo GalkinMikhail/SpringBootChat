@@ -1,36 +1,36 @@
 package SimbirSoftProject.controller;
 
-import SimbirSoftProject.domain.util.Participants;
+import SimbirSoftProject.controller.dto.ParticipantsDto;
+import SimbirSoftProject.entity.Participants;
 import SimbirSoftProject.service.interfaces.ParticipantsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/participants")
+@RequiredArgsConstructor
 public class ParticipantsController {
 
     private final ParticipantsService participantsService;
-
-    public ParticipantsController(ParticipantsService participantsService){
-        this.participantsService = participantsService;
-    }
     @PostMapping("/add")
-    public String addParticipants(@RequestBody Participants participants){
-        participantsService.addParticipant(participants);
-        return "Participant was added successfully";
+    public ResponseEntity<ParticipantsDto> addParticipants(@RequestBody ParticipantsDto participantsDto){
+        participantsService.addParticipant(participantsDto);
+        return ResponseEntity.ok(participantsDto);
     }
     @GetMapping("/get/all")
     public List<Participants> getAll(){
         return participantsService.getAll();
     }
     @DeleteMapping("/delete")
-    public String deleteParticipant(@RequestBody Participants participants){
-        participantsService.deleteParticipant(participants);
-        return "Participant was deleted successfully";
+    public ResponseEntity<String> deleteParticipant(@PathVariable Long id){
+        participantsService.deleteParticipantById(id);
+        return ResponseEntity.ok("Participant was deleted successfully");
     }
-    @GetMapping("/get/{id}")
-    public Participants getParticipantById(@PathVariable Long id){
-        return participantsService.getParticipantById(id);
-    }
+    //@GetMapping("/get/{id}")
+    //public Participants getParticipantById(@PathVariable Long id){
+        //return participantsService.getParticipantById(id);
+    //}
 }

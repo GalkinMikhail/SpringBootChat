@@ -1,4 +1,4 @@
-package SimbirSoftProject.domain.util;
+package SimbirSoftProject.entity;
 
 public enum RoomType {
     PUBLIC,

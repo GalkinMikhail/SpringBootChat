@@ -1,7 +1,7 @@
 package SimbirSoftProject.service.interfaces;
 
-import SimbirSoftProject.domain.dto.UserDto;
-import SimbirSoftProject.domain.util.User;
+import SimbirSoftProject.controller.dto.UserDto;
+import SimbirSoftProject.entity.User;
 
 import java.util.List;
 

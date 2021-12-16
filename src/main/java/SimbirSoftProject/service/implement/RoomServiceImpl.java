@@ -1,34 +1,44 @@
 package SimbirSoftProject.service.implement;
 
-import SimbirSoftProject.domain.dto.RoomDto;
-import SimbirSoftProject.domain.util.Room;
+import SimbirSoftProject.controller.dto.RoomDto;
+import SimbirSoftProject.entity.Room;
+import SimbirSoftProject.repository.RoomRepository;
 import SimbirSoftProject.service.interfaces.RoomService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
+@Service
 public class RoomServiceImpl implements RoomService {
+
+    private final RoomRepository roomRepository;
     @Override
     public String createRoom(RoomDto roomDto) {
-        return null;
+        roomRepository.save(roomDto.roomDtoToRoom(roomDto));
+        return "Room created successfully";
     }
 
     @Override
     public Room getRoomById(Long id) {
-        return null;
+        return roomRepository.getById(id);
     }
 
     @Override
     public List<Room> getAllRooms() {
-        return null;
+        return roomRepository.findAll();
     }
 
     @Override
-    public String getRoomType(Room room) {
-        return null;
+    public String getRoomType(Long id) {
+        Room room1 = roomRepository.getById(id);
+        return room1.getType().toString();
     }
 
     @Override
     public String deleteRoomById(Long id) {
-        return null;
+        roomRepository.deleteById(id);
+        return "Room deleted successfully";
     }
 }

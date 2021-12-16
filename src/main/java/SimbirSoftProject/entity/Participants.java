@@ -1,6 +1,7 @@
-package SimbirSoftProject.domain.util;
+package SimbirSoftProject.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "participants")
+@NoArgsConstructor
 public class Participants {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,13 +17,9 @@ public class Participants {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id",nullable = false)
-    private Room roomId;
+    private Room room_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
-    private User userId;
-
-    public Participants(){
-
-    }
+    private User user_id;
 }

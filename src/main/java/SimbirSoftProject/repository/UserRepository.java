@@ -1,7 +1,7 @@
 package SimbirSoftProject.repository;
 
 
-import SimbirSoftProject.domain.util.User;
+import SimbirSoftProject.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
