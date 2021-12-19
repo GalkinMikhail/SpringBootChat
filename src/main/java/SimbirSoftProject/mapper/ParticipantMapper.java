@@ -13,17 +13,7 @@ import java.util.List;
 public interface ParticipantMapper {
 
     ParticipantMapper PARTICIPANT_MAPPER = Mappers.getMapper(ParticipantMapper.class);
-    @Mappings({
-            @Mapping(target = "id", source = "id"),
-            @Mapping(target = "room_id", source = "room_id"),
-            @Mapping(target = "user_id", source = "user_id"),
-    })
     ParticipantsDto participantToParticipantDto(Participants entity);
-    @Mappings({
-            @Mapping(target = "id", source = "id"),
-            @Mapping(target = "room_id", source = "room_id"),
-            @Mapping(target = "user_id", source = "user_id"),
-    })
     Participants participantsDtoToParticipants(ParticipantsDto dto);
     List<ParticipantsDto> allToDTO(List<Participants> participantsList);
 }
