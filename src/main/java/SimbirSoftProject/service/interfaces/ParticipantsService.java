@@ -6,8 +6,8 @@ import SimbirSoftProject.entity.Participants;
 import java.util.List;
 
 public interface ParticipantsService {
-    String addParticipant(ParticipantsDto participantsDto);
-    List<Participants> getAll();
-    String deleteParticipantById(Long id);
-//    Participants getParticipantById(Long id);
+    void addParticipant(ParticipantsDto participantsDto);
+    List<ParticipantsDto> getAll();
+    void deleteParticipantById(Long id);
+    ParticipantsDto getParticipantById(Long id);
 }

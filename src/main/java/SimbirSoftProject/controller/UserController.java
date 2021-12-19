@@ -5,9 +5,12 @@ import SimbirSoftProject.controller.dto.UserDto;
 import SimbirSoftProject.entity.User;
 import SimbirSoftProject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,22 +22,45 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody UserDto userDto){
-        userService.createUser(userDto);
-        return ResponseEntity.ok("User created success");
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto){
+        if (userDto == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        this.userService.createUser(userDto);
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
     @GetMapping("/get/All")
-    public List<User> getAll(){
-        return userService.getAll();
+    public ResponseEntity<List<UserDto>> getAll(){
+        List<UserDto> userDtoList = this.userService.getAll();
+
+        if (userDtoList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(userDtoList,HttpStatus.OK);
     }
     @GetMapping("/get/{id}")
-    public User getUserById(@PathVariable Long id){
-        return userService.getUserById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id){
+        if(id == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        UserDto userDto = this.userService.getUserById(id);
+        if (userDto == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(userDto);
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long id){
-        userService.deleteUserById(id);
-        return ResponseEntity.ok("User deleted successfully");
+    public ResponseEntity<UserDto> deleteUserById(@PathVariable Long id){
+        UserDto userDto = this.userService.getUserById(id);
+        if (userDto == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        this.userService.deleteUserById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

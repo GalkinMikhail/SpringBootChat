@@ -6,9 +6,9 @@ import SimbirSoftProject.entity.Room;
 import java.util.List;
 
 public interface RoomService {
-    String createRoom(RoomDto roomDto);
-    Room getRoomById(Long id);
-    List<Room> getAllRooms();
+    void createRoom(RoomDto roomDto);
+    RoomDto getRoomById(Long id);
+    List<RoomDto> getAllRooms();
     String getRoomType(Long id);
-    String deleteRoomById(Long id);
+    void deleteRoomById(Long id);
 }

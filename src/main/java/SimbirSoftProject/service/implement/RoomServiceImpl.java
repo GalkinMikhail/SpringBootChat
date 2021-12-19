@@ -1,7 +1,11 @@
 package SimbirSoftProject.service.implement;
 
 import SimbirSoftProject.controller.dto.RoomDto;
+import SimbirSoftProject.controller.dto.UserDto;
 import SimbirSoftProject.entity.Room;
+import SimbirSoftProject.entity.User;
+import SimbirSoftProject.mapper.RoomMapper;
+import SimbirSoftProject.mapper.UserMapper;
 import SimbirSoftProject.repository.RoomRepository;
 import SimbirSoftProject.service.interfaces.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +19,18 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
     @Override
-    public String createRoom(RoomDto roomDto) {
+    public void createRoom(RoomDto roomDto) {
         roomRepository.save(roomDto.roomDtoToRoom(roomDto));
-        return "Room created successfully";
     }
 
     @Override
-    public Room getRoomById(Long id) {
-        return roomRepository.getById(id);
+    public RoomDto getRoomById(Long id) {
+        return roomToRoomDto(roomRepository.getById(id));
     }
 
     @Override
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomDto> getAllRooms() {
+        return allToDTO(roomRepository.findAll());
     }
 
     @Override
@@ -37,8 +40,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String deleteRoomById(Long id) {
+    public void deleteRoomById(Long id) {
         roomRepository.deleteById(id);
-        return "Room deleted successfully";
+    }
+    private RoomDto roomToRoomDto(Room room){
+        return RoomMapper.ROOM_MAPPER.roomToRoomDto(room);
+    }
+    private List<RoomDto> allToDTO(List<Room> roomList){
+        return RoomMapper.ROOM_MAPPER.allToDTO(roomList);
     }
 }

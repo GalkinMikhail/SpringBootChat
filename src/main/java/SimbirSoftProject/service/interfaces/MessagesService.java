@@ -5,8 +5,8 @@ import SimbirSoftProject.entity.Messages;
 
 public interface MessagesService {
 
-    String createMessage(MessageDto messageDto);
-    Messages getMessageById(Long id);
-    String deleteMessageById(Long id);
-    String updateMessage(Long id);
+    void createMessage(MessageDto messageDto);
+    MessageDto getMessageById(Long id);
+    void deleteMessageById(Long id);
+    void updateMessage(Long id);
 }
