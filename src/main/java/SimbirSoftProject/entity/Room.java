@@ -18,12 +18,13 @@ public class Room {
     private Long id;
 
     @Size(max = 30, message = "Room name is too long")
+    @Column(name = "name")
     private String name;
 
     @Enumerated(EnumType.STRING)
     private RoomType type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id",nullable = false)
-    private User user_id_creator;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator_id",nullable = false)
+    private User creatorId;
 }

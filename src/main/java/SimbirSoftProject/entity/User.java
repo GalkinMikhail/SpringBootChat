@@ -10,10 +10,13 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
+
 @Entity
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_user_login", columnNames = "login")
+})
 @Getter
 @Setter
-@Table(name = "user")
 @NoArgsConstructor
 public class User {
     @Id
@@ -21,9 +24,11 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Login cannot be empty")
+    @Column(name = "login")
     private String login;
 
     @NotBlank(message = "Password cannot be empty")
+    @Column(name = "password")
     private String password;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -32,19 +37,26 @@ public class User {
     private Set<Role> roles;
 
     @NotBlank(message = "Firstname cannot be empty")
+    @Column(name = "firstname")
     private String firstName;
 
     @Size(max = 30)
     @NotBlank(message = "Lastname cannot be empty")
+    @Column(name = "lastname")
     private String lastName;
 
-    private boolean is_user_online;
+    @Column(name = "is_user_online")
+    private boolean isUserOnline;
 
-    private boolean is_blocked;
+    @Column(name = "is_blocked")
+    private boolean isBlocked;
 
     @Temporal(TemporalType.DATE)
-    private Date block_date;
+    @Column(name = "block_date")
+    private Date blockDate;
 
     @Temporal(TemporalType.DATE)
-    private Date blocking_duration;
+    @Column(name = "blocking_duration")
+    private Date blockingDuration;
+
 }

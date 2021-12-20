@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-12-20T01:59:41+0300",
+    date = "2021-12-20T19:30:10+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 16.0.1 (Oracle Corporation)"
 )
 @Component
@@ -22,8 +22,12 @@ public class MessageMapperImpl implements MessageMapper {
         MessageDto messageDto = new MessageDto();
 
         messageDto.setId( entity.getId() );
-        messageDto.setCreated_at( entity.getCreated_at() );
+        messageDto.setCreatedAt( entity.getCreatedAt() );
+        messageDto.setUpdatedAt( entity.getUpdatedAt() );
         messageDto.setContent( entity.getContent() );
+        messageDto.setToId( entity.getToId() );
+        messageDto.setFromId( entity.getFromId() );
+        messageDto.setRoomId( entity.getRoomId() );
 
         return messageDto;
     }
@@ -37,8 +41,12 @@ public class MessageMapperImpl implements MessageMapper {
         Messages messages = new Messages();
 
         messages.setId( dto.getId() );
-        messages.setCreated_at( dto.getCreated_at() );
+        messages.setCreatedAt( dto.getCreatedAt() );
+        messages.setUpdatedAt( dto.getUpdatedAt() );
         messages.setContent( dto.getContent() );
+        messages.setToId( dto.getToId() );
+        messages.setFromId( dto.getFromId() );
+        messages.setRoomId( dto.getRoomId() );
 
         return messages;
     }

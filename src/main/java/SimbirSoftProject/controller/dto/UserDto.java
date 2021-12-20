@@ -5,10 +5,11 @@ import java.util.Set;
 
 import SimbirSoftProject.entity.Role;
 import SimbirSoftProject.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import SimbirSoftProject.mapper.UserMapper;
+import lombok.*;
 
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,11 +26,7 @@ public class UserDto {
     private Date blockingDuration;
 
     public User userDtoToUser(UserDto newUser){
-        User user = new User();
-        user.setFirstName(newUser.getFirstName());
-        user.setLastName(newUser.getLastName());
-        user.setLogin(newUser.getLogin());
-        user.setPassword(newUser.getPassword());
-        return user;
+        return UserMapper.USER_MAPPER.userDtoToUser(newUser);
     }
+
 }

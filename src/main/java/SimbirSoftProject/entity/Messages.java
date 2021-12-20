@@ -17,23 +17,25 @@ public class Messages {
     private long id;
 
     @Temporal(TemporalType.DATE)
-    private Date created_at;
+    @Column(name = "created_at")
+    private Date createdAt;
 
     @Temporal(TemporalType.DATE)
-    private Date updated_at;
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
-    @Column(name="content", length=50, nullable=false)
+    @Column(name="content", length=10000, nullable=false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false,insertable = false,updatable = false)
-    private User to_id;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "to_id", nullable = false,insertable = false,updatable = false)
+    private User toId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false,insertable = false,updatable = false)
-    private User from_id;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "from_id", nullable = false,insertable = false,updatable = false)
+    private User fromId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id",nullable = false)
-    private Room room_id;
+    private Room roomId;
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-12-20T01:59:41+0300",
+    date = "2021-12-20T19:30:10+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 16.0.1 (Oracle Corporation)"
 )
 @Component
@@ -35,6 +35,10 @@ public class UserMapperImpl implements UserMapper {
         }
         userDto.setFirstName( entity.getFirstName() );
         userDto.setLastName( entity.getLastName() );
+        userDto.setUserOnline( entity.isUserOnline() );
+        userDto.setBlocked( entity.isBlocked() );
+        userDto.setBlockDate( entity.getBlockDate() );
+        userDto.setBlockingDuration( entity.getBlockingDuration() );
 
         return userDto;
     }
@@ -56,6 +60,10 @@ public class UserMapperImpl implements UserMapper {
         }
         user.setFirstName( dto.getFirstName() );
         user.setLastName( dto.getLastName() );
+        user.setUserOnline( dto.isUserOnline() );
+        user.setBlocked( dto.isBlocked() );
+        user.setBlockDate( dto.getBlockDate() );
+        user.setBlockingDuration( dto.getBlockingDuration() );
 
         return user;
     }
