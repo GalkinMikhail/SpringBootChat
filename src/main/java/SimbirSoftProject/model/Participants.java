@@ -1,4 +1,4 @@
-package SimbirSoftProject.entity;
+package SimbirSoftProject.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

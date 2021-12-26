@@ -1,22 +1,21 @@
-package SimbirSoftProject.entity;
+package SimbirSoftProject.model;
 
-import SimbirSoftProject.entity.Role;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
 @Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_user_login", columnNames = "login")
+            @UniqueConstraint(columnNames = "login")
 })
 @Getter
 @Setter
+@Data
 @NoArgsConstructor
 public class User {
     @Id
@@ -31,18 +30,17 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+    joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    private List<Role> roles;
 
     @NotBlank(message = "Firstname cannot be empty")
-    @Column(name = "firstname")
     private String firstName;
 
     @Size(max = 30)
     @NotBlank(message = "Lastname cannot be empty")
-    @Column(name = "lastname")
     private String lastName;
 
     @Column(name = "is_user_online")
@@ -59,4 +57,14 @@ public class User {
     @Column(name = "blocking_duration")
     private Date blockingDuration;
 
+    public User(String login, String password, String firstName, String lastName, boolean isUserOnline, boolean isBlocked, Date blockDate, Date blockingDuration) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isUserOnline = isUserOnline;
+        this.isBlocked = isBlocked;
+        this.blockDate = blockDate;
+        this.blockingDuration = blockingDuration;
+    }
 }

@@ -1,7 +1,6 @@
 package SimbirSoftProject.service.interfaces;
 
-import SimbirSoftProject.controller.dto.ParticipantsDto;
-import SimbirSoftProject.entity.Participants;
+import SimbirSoftProject.dto.ParticipantsDto;
 
 import java.util.List;
 

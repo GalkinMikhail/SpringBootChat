@@ -1,11 +1,9 @@
 package SimbirSoftProject.service.implement;
 
-import SimbirSoftProject.controller.dto.RoomDto;
-import SimbirSoftProject.controller.dto.UserDto;
-import SimbirSoftProject.entity.Room;
-import SimbirSoftProject.entity.User;
+import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.model.Room;
+import SimbirSoftProject.model.RoomType;
 import SimbirSoftProject.mapper.RoomMapper;
-import SimbirSoftProject.mapper.UserMapper;
 import SimbirSoftProject.repository.RoomRepository;
 import SimbirSoftProject.service.interfaces.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +18,8 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     @Override
     public void createRoom(RoomDto roomDto) {
+        roomDto.setName(roomDto.getName());
+        roomDto.setType(RoomType.PUBLIC);
         roomRepository.save(roomDto.roomDtoToRoom(roomDto));
     }
 

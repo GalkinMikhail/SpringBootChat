@@ -1,7 +1,7 @@
 package SimbirSoftProject.controller;
 
-import SimbirSoftProject.controller.dto.RoomDto;
-import SimbirSoftProject.entity.Room;
+import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.service.interfaces.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,19 +20,16 @@ public class RoomController {
     @PostMapping("/create")
     public ResponseEntity<RoomDto> createRoom(@RequestBody @Valid RoomDto roomDto){
         if (roomDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Failed to create the room", "room name,room type");
         }
         this.roomService.createRoom(roomDto);
         return new ResponseEntity<>(roomDto,HttpStatus.CREATED);
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<RoomDto> getRoomById(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         RoomDto roomDto = this.roomService.getRoomById(id);
         if (roomDto == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
         return ResponseEntity.ok(roomDto);
     }
@@ -41,19 +38,16 @@ public class RoomController {
         List<RoomDto> roomDtoList = this.roomService.getAllRooms();
 
         if(roomDtoList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(roomDtoList,HttpStatus.OK);
     }
-    @GetMapping("/get/type")
+    @GetMapping("/get/type/{id}")
     public ResponseEntity<String> getRoomType(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         RoomDto roomDto = this.roomService.getRoomById(id);
         if (roomDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
         String type = this.roomService.getRoomType(id);
         return new ResponseEntity<>(type,HttpStatus.OK);
@@ -63,7 +57,7 @@ public class RoomController {
     public ResponseEntity<RoomDto> deleteRoomById(@PathVariable Long id){
         RoomDto roomDto = this.roomService.getRoomById(id);
         if (roomDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
         this.roomService.deleteRoomById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

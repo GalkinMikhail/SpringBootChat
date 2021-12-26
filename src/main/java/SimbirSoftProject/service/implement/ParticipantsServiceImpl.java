@@ -1,7 +1,7 @@
 package SimbirSoftProject.service.implement;
 
-import SimbirSoftProject.controller.dto.ParticipantsDto;
-import SimbirSoftProject.entity.Participants;
+import SimbirSoftProject.dto.ParticipantsDto;
+import SimbirSoftProject.model.Participants;
 import SimbirSoftProject.mapper.ParticipantMapper;
 import SimbirSoftProject.repository.ParticipantsRepository;
 import SimbirSoftProject.service.interfaces.ParticipantsService;
@@ -16,6 +16,8 @@ public class ParticipantsServiceImpl implements ParticipantsService {
     private final ParticipantsRepository participantsRepository;
     @Override
     public void addParticipant(ParticipantsDto participantsDto) {
+        participantsDto.setRoomId(participantsDto.getRoomId());
+        participantsDto.setUserId(participantsDto.getUserId());
         participantsRepository.save(participantsDto.participantDtoToParticipant(participantsDto));
     }
 

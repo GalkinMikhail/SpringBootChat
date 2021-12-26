@@ -1,10 +1,8 @@
 package SimbirSoftProject.mapper;
 
-import SimbirSoftProject.controller.dto.MessageDto;
-import SimbirSoftProject.entity.Messages;
+import SimbirSoftProject.dto.MessageDto;
+import SimbirSoftProject.model.Messages;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")

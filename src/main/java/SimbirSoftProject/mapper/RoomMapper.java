@@ -1,7 +1,7 @@
 package SimbirSoftProject.mapper;
 
-import SimbirSoftProject.controller.dto.RoomDto;
-import SimbirSoftProject.entity.Room;
+import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.model.Room;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

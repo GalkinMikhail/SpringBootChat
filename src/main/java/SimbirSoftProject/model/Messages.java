@@ -1,8 +1,11 @@
-package SimbirSoftProject.entity;
+package SimbirSoftProject.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,11 +19,11 @@ public class Messages {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Temporal(TemporalType.DATE)
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
-    @Temporal(TemporalType.DATE)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 

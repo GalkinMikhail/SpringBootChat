@@ -1,7 +1,7 @@
 package SimbirSoftProject.controller;
 
-import SimbirSoftProject.controller.dto.MessageDto;
-import SimbirSoftProject.entity.Messages;
+import SimbirSoftProject.dto.MessageDto;
+import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.service.interfaces.MessagesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,42 +17,33 @@ public class MessageController{
     @PostMapping("/create")
     public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto messageDto){
         if (messageDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Failed to create the message", "message content");
         }
         this.messagesService.createMessage(messageDto);
         return new ResponseEntity<>(messageDto,HttpStatus.CREATED);
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         MessageDto messageDto = this.messagesService.getMessageById(id);
         if (messageDto == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Message with id " + id + "not found", "message id");
         }
         return ResponseEntity.ok(messageDto);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<MessageDto> deleteMessageById(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         MessageDto messageDto = this.messagesService.getMessageById(id);
         if(messageDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Message with id " + id + "not found", "message id");
         }
         this.messagesService.deleteMessageById(id);
         return new ResponseEntity<>(messageDto,HttpStatus.OK);
     }
     @PostMapping("/update/{id}")
     public ResponseEntity<MessageDto> updateMessage(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         MessageDto messageDto = this.messagesService.getMessageById(id);
         if(messageDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Message with id " + id + "not found", "message id");
         }
         messagesService.updateMessage(id);
         return new ResponseEntity<>(messageDto,HttpStatus.OK);

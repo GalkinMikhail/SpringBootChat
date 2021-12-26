@@ -1,8 +1,8 @@
-package SimbirSoftProject.controller.dto;
+package SimbirSoftProject.dto;
 
-import SimbirSoftProject.entity.Messages;
-import SimbirSoftProject.entity.Room;
-import SimbirSoftProject.entity.User;
+import SimbirSoftProject.model.Messages;
+import SimbirSoftProject.model.Room;
+import SimbirSoftProject.model.User;
 import SimbirSoftProject.mapper.MessageMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,13 +14,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDto {
-    private long id;
+    private long id; // ?
     public Date createdAt;
     public Date updatedAt;
     public String content;
-    private User toId;
-    private User fromId;
-    private Room roomId;
+    private User toId; // ?
+    private User fromId; // ?
+    private Room roomId; // ?
 
     public Messages messagesDtoTomMessage(MessageDto messageDto){
         return MessageMapper.MESSAGE_MAPPER.messagesDtoToMessages(messageDto);

@@ -1,7 +1,6 @@
 package SimbirSoftProject.service.interfaces;
 
-import SimbirSoftProject.controller.dto.RoomDto;
-import SimbirSoftProject.entity.Room;
+import SimbirSoftProject.dto.RoomDto;
 
 import java.util.List;
 

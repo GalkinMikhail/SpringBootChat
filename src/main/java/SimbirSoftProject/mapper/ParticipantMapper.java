@@ -1,7 +1,7 @@
 package SimbirSoftProject.mapper;
 
-import SimbirSoftProject.controller.dto.ParticipantsDto;
-import SimbirSoftProject.entity.Participants;
+import SimbirSoftProject.dto.ParticipantsDto;
+import SimbirSoftProject.model.Participants;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

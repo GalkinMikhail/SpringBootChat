@@ -1,11 +1,10 @@
 package SimbirSoftProject.controller;
 
 
-import SimbirSoftProject.controller.dto.UserDto;
-import SimbirSoftProject.entity.User;
+import SimbirSoftProject.dto.UserDto;
+import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +13,16 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
 
     private final UserService userService;
 
-    @PostMapping("/create")
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto){
-        if (userDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        this.userService.createUser(userDto);
+    @PostMapping("/registration")
+    public ResponseEntity<UserDto> registration(@RequestBody @Valid UserDto userDto){
+        this.userService.registration(userDto);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
     @GetMapping("/get/All")
@@ -35,20 +30,16 @@ public class UserController {
         List<UserDto> userDtoList = this.userService.getAll();
 
         if (userDtoList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(userDtoList,HttpStatus.OK);
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         UserDto userDto = this.userService.getUserById(id);
         if (userDto == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("User with id " + id + "not found", "user id");
         }
         return ResponseEntity.ok(userDto);
     }
@@ -56,7 +47,7 @@ public class UserController {
     public ResponseEntity<UserDto> deleteUserById(@PathVariable Long id){
         UserDto userDto = this.userService.getUserById(id);
         if (userDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("User with id " + id + "not found", "user id");
         }
 
         this.userService.deleteUserById(id);

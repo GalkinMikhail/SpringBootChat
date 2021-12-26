@@ -1,7 +1,7 @@
 package SimbirSoftProject.controller;
 
-import SimbirSoftProject.controller.dto.ParticipantsDto;
-import SimbirSoftProject.entity.Participants;
+import SimbirSoftProject.dto.ParticipantsDto;
+import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.service.interfaces.ParticipantsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class ParticipantsController {
     @PostMapping("/add")
     public ResponseEntity<ParticipantsDto> addParticipants(@RequestBody ParticipantsDto participantsDto){
         if (participantsDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Participant was not added, check input data", "participant room id ,participant user id");
         }
         this.participantsService.addParticipant(participantsDto);
         return new ResponseEntity<>(participantsDto,HttpStatus.OK);
@@ -29,16 +29,16 @@ public class ParticipantsController {
         List<ParticipantsDto> participantsDtoList = this.participantsService.getAll();
 
         if(participantsDtoList.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(participantsDtoList,HttpStatus.OK);
     }
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ParticipantsDto> deleteParticipant(@PathVariable Long id){
         ParticipantsDto participantsDto = this.participantsService.getParticipantById(id);
         if(participantsDto == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("Participant with id " + id + "not found", "participant id");
         }
         this.participantsService.deleteParticipantById(id);
         return new ResponseEntity<>(participantsDto,HttpStatus.NO_CONTENT);
@@ -46,12 +46,9 @@ public class ParticipantsController {
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<ParticipantsDto> getParticipantById(@PathVariable Long id){
-        if(id == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         ParticipantsDto participantsDto = this.participantsService.getParticipantById(id);
         if (participantsDto == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Participant with id " + id + "not found", "participant id");
         }
         return ResponseEntity.ok(participantsDto);
     }

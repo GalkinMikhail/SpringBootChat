@@ -1,7 +1,7 @@
 package SimbirSoftProject.service.implement;
 
-import SimbirSoftProject.controller.dto.MessageDto;
-import SimbirSoftProject.entity.Messages;
+import SimbirSoftProject.dto.MessageDto;
+import SimbirSoftProject.model.Messages;
 import SimbirSoftProject.mapper.MessageMapper;
 import SimbirSoftProject.repository.MessageRepository;
 import SimbirSoftProject.service.interfaces.MessagesService;
@@ -15,6 +15,7 @@ public class MessageServiceImpl implements MessagesService {
     private final MessageRepository messageRepository;
     @Override
     public void createMessage(MessageDto messageDto) {
+        messageDto.setContent(messageDto.getContent());
         messageRepository.save(messageDto.messagesDtoTomMessage(messageDto));
     }
 
@@ -32,6 +33,7 @@ public class MessageServiceImpl implements MessagesService {
     public void updateMessage(Long id) {
         Messages messages = messageRepository.getById(id);
         messageRepository.deleteById(id);
+        messages.setContent(messages.getContent()); // ?
         messageRepository.save(messages);
     }
     private MessageDto messageToMessageDTO(Messages messages){

@@ -1,7 +1,6 @@
 package SimbirSoftProject.service.interfaces;
 
-import SimbirSoftProject.controller.dto.MessageDto;
-import SimbirSoftProject.entity.Messages;
+import SimbirSoftProject.dto.MessageDto;
 
 public interface MessagesService {
 
