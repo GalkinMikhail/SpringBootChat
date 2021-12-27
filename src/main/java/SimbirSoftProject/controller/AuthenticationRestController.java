@@ -49,7 +49,7 @@ public class AuthenticationRestController {
             User user = userService.findByLogin(login);
 
             if(user == null){
-                throw new UsernameNotFoundException("User with login" + login + "Not found");
+                throw new UsernameNotFoundException("User with login" + login + "not found");
             }
 
             String token = jwtTokenProvider.createToken(login,user.getRoles());

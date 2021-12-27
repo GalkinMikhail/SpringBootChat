@@ -2,6 +2,7 @@ package SimbirSoftProject.exceptions;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,8 +18,6 @@ import java.util.Map;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class BaseControllerAdvice {
-
-    private final DateTimeFormatter isoDateTimeFormatter;
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public Object resourceNotFoundException(ResourceNotFoundException ex){
@@ -44,7 +43,7 @@ public class BaseControllerAdvice {
         body.put("message",ex.getMessage());
         body.put("techInfo", ex.getTechInfo());
         body.put("status",status.toString());
-        body.put("timestamp",isoDateTimeFormatter.format(ZonedDateTime.now()));
+        body.put("timestamp",String.valueOf(System.currentTimeMillis()));
         return new ResponseEntity<>(body,headers,status);
     }
 

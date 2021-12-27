@@ -21,7 +21,6 @@ public class UserDto {
     private String password;
     private String firstName;
     private String lastName;
-    private List<Role> roles;
     private boolean isUserOnline; // ?
     private boolean isBlocked; // ?
     private Date blockDate; // ?
