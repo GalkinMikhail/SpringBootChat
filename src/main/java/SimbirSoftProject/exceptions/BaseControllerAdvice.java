@@ -10,14 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
 @RequiredArgsConstructor
 public class BaseControllerAdvice {
+    Date date = new Date();
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public Object resourceNotFoundException(ResourceNotFoundException ex){
@@ -33,7 +33,14 @@ public class BaseControllerAdvice {
     public Object persistenceLayerException(PersistenceLayerException ex){
         return response(HttpStatus.INTERNAL_SERVER_ERROR,ex);
     }
-
+    @ExceptionHandler(UserBlockedException.class)
+    public Object userBlockedException(UserBlockedException ex){
+        return response(HttpStatus.CONFLICT,ex);
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public Object accessDeniedException(AccessDeniedException ex){
+        return response(HttpStatus.CONFLICT,ex);
+    }
 
 
     private Object response(HttpStatus status, AbstractException ex){
@@ -43,7 +50,7 @@ public class BaseControllerAdvice {
         body.put("message",ex.getMessage());
         body.put("techInfo", ex.getTechInfo());
         body.put("status",status.toString());
-        body.put("timestamp",String.valueOf(System.currentTimeMillis()));
+        body.put("timestamp",String.valueOf(date));
         return new ResponseEntity<>(body,headers,status);
     }
 

@@ -1,5 +1,6 @@
 package SimbirSoftProject.security;
 
+import SimbirSoftProject.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,6 @@ import java.util.Date;
 
 @AllArgsConstructor
 public class SecurityUser implements UserDetails {
-
     @JsonIgnore
     @Getter
     private final Long Id;

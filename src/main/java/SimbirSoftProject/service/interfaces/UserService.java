@@ -1,5 +1,6 @@
 package SimbirSoftProject.service.interfaces;
 
+import SimbirSoftProject.dto.RegistrationDto;
 import SimbirSoftProject.dto.UserDto;
 import SimbirSoftProject.model.User;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void registration(UserDto userDto);
+    void registration(RegistrationDto registrationDto);
 
     UserDto getUserById(Long id);
 
@@ -16,4 +17,12 @@ public interface UserService {
     List<UserDto> getAll();
 
     User findByLogin(String login);
+
+    void blockUser(Long id);
+
+    void unBlockUser(Long id);
+
+    void setModerator(Long id);
+
+    void deleteModerator(Long id);
 }

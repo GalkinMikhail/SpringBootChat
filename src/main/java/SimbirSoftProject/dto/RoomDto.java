@@ -12,11 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomDto {
-    private Long id;
     private String name;
-    private RoomType type = RoomType.PUBLIC;
-    private User creatorId; // ?
-
+    private RoomType type;
     public Room roomDtoToRoom(RoomDto roomDto){
         return RoomMapper.ROOM_MAPPER.roomDtoToRoom(roomDto);
     }

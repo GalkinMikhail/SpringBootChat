@@ -1,20 +1,24 @@
 package SimbirSoftProject.model;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @Table(name = "room")
 @NoArgsConstructor
+@Entity
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Size(max = 30, message = "Room name is too long")
@@ -24,7 +28,13 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private RoomType type;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator_id",nullable = false)
     private User creatorId;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "room_participants",
+            joinColumns = {@JoinColumn(name = "room_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    private Set<User> participants = new HashSet<>();
 }

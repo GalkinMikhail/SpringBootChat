@@ -1,12 +1,1 @@
-SimbirSoftProject\config\SecurityConfig.class
-SimbirSoftProject\security\JwtAuthenticationException.class
-SimbirSoftProject\security\JwtConfigurer.class
-SimbirSoftProject\security\UserDetailsServiceImpl.class
-SimbirSoftProject\rest\AuthenticationRequestDTO.class
-SimbirSoftProject\security\JwtTokenProvider.class
-SimbirSoftProject\security\JwtTokenFilter.class
-SimbirSoftProject\security\SecurityUser.class
-SimbirSoftProject\repository\RoleRepository.class
-SimbirSoftProject\security\JwtUserFactory.class
-SimbirSoftProject\rest\DeveloperRestController.class
-SimbirSoftProject\rest\AuthenticationRestController.class
+SimbirSoftProject\service\implement\RoomServiceImpl.class

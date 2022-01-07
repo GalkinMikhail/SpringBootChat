@@ -2,6 +2,7 @@ package SimbirSoftProject.mapper;
 
 import SimbirSoftProject.dto.RoomDto;
 import SimbirSoftProject.model.Room;
+import SimbirSoftProject.model.Room.RoomBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-12-27T14:34:29+0300",
+    date = "2022-01-08T02:07:06+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 16.0.1 (Oracle Corporation)"
 )
 @Component
@@ -23,10 +24,8 @@ public class RoomMapperImpl implements RoomMapper {
 
         RoomDto roomDto = new RoomDto();
 
-        roomDto.setId( entity.getId() );
         roomDto.setName( entity.getName() );
         roomDto.setType( entity.getType() );
-        roomDto.setCreatorId( entity.getCreatorId() );
 
         return roomDto;
     }
@@ -37,14 +36,12 @@ public class RoomMapperImpl implements RoomMapper {
             return null;
         }
 
-        Room room = new Room();
+        RoomBuilder room = Room.builder();
 
-        room.setId( dto.getId() );
-        room.setName( dto.getName() );
-        room.setType( dto.getType() );
-        room.setCreatorId( dto.getCreatorId() );
+        room.name( dto.getName() );
+        room.type( dto.getType() );
 
-        return room;
+        return room.build();
     }
 
     @Override

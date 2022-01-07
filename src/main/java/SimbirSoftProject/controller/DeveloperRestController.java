@@ -1,6 +1,7 @@
 package SimbirSoftProject.controller;
 
 import SimbirSoftProject.dto.UserDto;
+import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,12 @@ public class DeveloperRestController {
 
     @GetMapping(value = "users/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id){
-        UserDto result = userService.getUserById(id);
-
-        if (result == null){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            UserDto result = userService.getUserById(id);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        catch (Exception e){
+                throw new ResourceNotFoundException("User with id " + id + " not found", "user id");
+        }
     }
 }

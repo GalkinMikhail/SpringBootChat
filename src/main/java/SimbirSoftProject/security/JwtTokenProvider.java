@@ -13,10 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JwtTokenProvider {
@@ -33,18 +30,13 @@ public class JwtTokenProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
-    }
 
     @PostConstruct
     protected void init(){
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String login,List<Role> roles){
+    public String createToken(String login, Set<Role> roles){
         Claims claims = Jwts.claims().setSubject(login);
         claims.put("roles",getRoleNames(roles));
 
@@ -59,7 +51,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private List<String> getRoleNames(List<Role> userRoles){
+    private List<String> getRoleNames(Set<Role> userRoles){
         List<String> result = new ArrayList<>();
         userRoles.forEach(role ->
                 result.add(role.getName()

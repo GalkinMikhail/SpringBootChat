@@ -1,13 +1,15 @@
 package SimbirSoftProject.mapper;
 
 import SimbirSoftProject.dto.MessageDto;
+import SimbirSoftProject.dto.MessageDto.MessageDtoBuilder;
 import SimbirSoftProject.model.Messages;
+import SimbirSoftProject.model.Messages.MessagesBuilder;
 import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-12-27T14:34:30+0300",
+    date = "2022-01-08T02:07:06+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 16.0.1 (Oracle Corporation)"
 )
 @Component
@@ -19,17 +21,12 @@ public class MessageMapperImpl implements MessageMapper {
             return null;
         }
 
-        MessageDto messageDto = new MessageDto();
+        MessageDtoBuilder messageDto = MessageDto.builder();
 
-        messageDto.setId( entity.getId() );
-        messageDto.setCreatedAt( entity.getCreatedAt() );
-        messageDto.setUpdatedAt( entity.getUpdatedAt() );
-        messageDto.setContent( entity.getContent() );
-        messageDto.setToId( entity.getToId() );
-        messageDto.setFromId( entity.getFromId() );
-        messageDto.setRoomId( entity.getRoomId() );
+        messageDto.createdAt( entity.getCreatedAt() );
+        messageDto.content( entity.getContent() );
 
-        return messageDto;
+        return messageDto.build();
     }
 
     @Override
@@ -38,16 +35,11 @@ public class MessageMapperImpl implements MessageMapper {
             return null;
         }
 
-        Messages messages = new Messages();
+        MessagesBuilder messages = Messages.builder();
 
-        messages.setId( dto.getId() );
-        messages.setCreatedAt( dto.getCreatedAt() );
-        messages.setUpdatedAt( dto.getUpdatedAt() );
-        messages.setContent( dto.getContent() );
-        messages.setToId( dto.getToId() );
-        messages.setFromId( dto.getFromId() );
-        messages.setRoomId( dto.getRoomId() );
+        messages.createdAt( dto.getCreatedAt() );
+        messages.content( dto.getContent() );
 
-        return messages;
+        return messages.build();
     }
 }

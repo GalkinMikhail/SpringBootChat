@@ -1,15 +1,32 @@
 package SimbirSoftProject.controller;
 
 import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.dto.RoomViewDto;
+import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.exceptions.ResourceNotFoundException;
+import SimbirSoftProject.exceptions.UserBlockedException;
+import SimbirSoftProject.model.Role;
+import SimbirSoftProject.model.Room;
+import SimbirSoftProject.model.User;
+import SimbirSoftProject.security.SecurityUser;
+import SimbirSoftProject.security.UserDetailsServiceImpl;
 import SimbirSoftProject.service.interfaces.RoomService;
+import SimbirSoftProject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/room")
@@ -17,25 +34,33 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
+    private final UserService userService;
     @PostMapping("/create")
-    public ResponseEntity<RoomDto> createRoom(@RequestBody @Valid RoomDto roomDto){
+    @ResponseBody
+    public ResponseEntity<RoomDto> createRoom(@RequestBody RoomDto roomDto){
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User user = userService.findByLogin(login);
+        if (user == null){
+            throw new ResourceNotFoundException("нет",".ptj");
+        }
         if (roomDto == null){
             throw new ResourceNotFoundException("Failed to create the room", "room name,room type");
         }
-        this.roomService.createRoom(roomDto);
+        this.roomService.createRoom(roomDto, user);
         return new ResponseEntity<>(roomDto,HttpStatus.CREATED);
     }
     @GetMapping("/get/{id}")
-    public ResponseEntity<RoomDto> getRoomById(@PathVariable Long id){
-        RoomDto roomDto = this.roomService.getRoomById(id);
-        if (roomDto == null){
+    public ResponseEntity<RoomViewDto> getRoomById(@PathVariable Long id){
+        RoomViewDto roomViewDto = this.roomService.getRoomById(id);
+        if (roomViewDto == null){
             throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
-        return ResponseEntity.ok(roomDto);
+        return ResponseEntity.ok(roomViewDto);
     }
     @GetMapping("/get/all")
-    public ResponseEntity<List<RoomDto>> getAllRooms(){
-        List<RoomDto> roomDtoList = this.roomService.getAllRooms();
+    public ResponseEntity<List<RoomViewDto>> getAllRooms(){
+        List<RoomViewDto> roomDtoList = this.roomService.getAllRooms();
 
         if(roomDtoList.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -45,8 +70,8 @@ public class RoomController {
     }
     @GetMapping("/get/type/{id}")
     public ResponseEntity<String> getRoomType(@PathVariable Long id){
-        RoomDto roomDto = this.roomService.getRoomById(id);
-        if (roomDto == null){
+        RoomViewDto roomViewDto = this.roomService.getRoomById(id);
+        if (roomViewDto == null){
             throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
         String type = this.roomService.getRoomType(id);
@@ -55,11 +80,70 @@ public class RoomController {
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<RoomDto> deleteRoomById(@PathVariable Long id){
-        RoomDto roomDto = this.roomService.getRoomById(id);
-        if (roomDto == null){
+        RoomViewDto roomViewDto = this.roomService.getRoomById(id);
+        if (roomViewDto == null){
             throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
         this.roomService.deleteRoomById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PostMapping("/add/{id}")
+    public ResponseEntity<RoomViewDto> addParticipant(@RequestBody UserToAddDto userToAddDto, @PathVariable Long id){
+        RoomViewDto roomViewDto = this.roomService.getRoomById(id);
+        if (roomViewDto == null){
+            throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
+        }
+        this.roomService.addParticipant(userToAddDto,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/kick/{id}")
+    public ResponseEntity<RoomViewDto> deleteParticipant(@RequestBody UserToAddDto userToAddDto, @PathVariable Long id){
+        RoomViewDto roomViewDto = this.roomService.getRoomById(id);
+        if (roomViewDto == null){
+            throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
+        }
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User user = userService.findByLogin(login);
+        boolean isAdmin = false;
+        Set<Role> userRoles = user.getRoles();
+        for (Role role : userRoles){
+            if (role.getName().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (!user.getLogin().equals(roomViewDto.getOwner().getLogin()) && !isAdmin){
+            throw new AccessDeniedException("You have no permission to delete participants from this room");
+        }
+        this.roomService.deleteParticipant(userToAddDto,id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PostMapping("/rename/{id}")
+    public ResponseEntity<String> renameRoom(@RequestBody RoomDto roomDto, @PathVariable Long id){
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User user = userService.findByLogin(login);
+        boolean UserBlocked = user.isBlocked();
+        if (UserBlocked){
+            throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
+        }
+        RoomViewDto roomViewDto = this.roomService.getRoomById(id);
+        if (roomViewDto == null){
+            throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
+        }
+        boolean isAdmin = false;
+        Set<Role> userRoles = user.getRoles();
+        for (Role role : userRoles){
+            if (role.getName().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (!user.getLogin().equals(roomViewDto.getOwner().getLogin()) && !isAdmin){
+            throw new AccessDeniedException("You have no permission to rename this room");
+        }
+        this.roomService.renameRoom(roomDto,id);
+        return new ResponseEntity<>("Room renamed successfully", HttpStatus.OK);
     }
 }

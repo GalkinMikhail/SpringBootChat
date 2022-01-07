@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -28,10 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-    private final static String LOGIN_ENDPOINT = "/api/v1/auth/login";
-    private final static String ADMIN_ENDPOINT = "/api/v1/admin/**";
-    private final static String MODERATOR_ENDPOINT = "/api/v1/moderator/**";
+    private final static String LOGIN_ENDPOINT = "/auth/login";
+    private final static String REGISTRATION_ENDPOINT = "/users/registration";
 
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception{
@@ -46,8 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
-                .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
-                .antMatchers(MODERATOR_ENDPOINT).hasRole("MODERATOR")
+                .antMatchers(REGISTRATION_ENDPOINT).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

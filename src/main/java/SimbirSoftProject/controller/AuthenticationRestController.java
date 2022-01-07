@@ -2,7 +2,9 @@ package SimbirSoftProject.controller;
 
 import SimbirSoftProject.dto.AuthenticationRequestDTO;
 import SimbirSoftProject.model.User;
+import SimbirSoftProject.repository.UserRepository;
 import SimbirSoftProject.security.JwtTokenProvider;
+import SimbirSoftProject.security.SecurityUser;
 import SimbirSoftProject.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "api/v1/auth")
+@RequestMapping(value = "/auth")
 public class AuthenticationRestController {
 
 
@@ -33,12 +36,15 @@ public class AuthenticationRestController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
 
     @Autowired
-    public AuthenticationRestController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public AuthenticationRestController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("login")
@@ -56,7 +62,8 @@ public class AuthenticationRestController {
             Map<Object,Object> response = new HashMap<>();
             response.put("login", requestDTO.getLogin());
             response.put("token", token);
-
+            user.setUserOnline(true);
+            userRepository.save(user);
             return ResponseEntity.ok(response);
 
         }
@@ -67,6 +74,11 @@ public class AuthenticationRestController {
     }
     @PostMapping("logout")
     public void logout(HttpServletRequest request, HttpServletResponse response){
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User user = userService.findByLogin(login);
+        user.setUserOnline(false);
+        userRepository.save(user);
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request,response,null);
     }
