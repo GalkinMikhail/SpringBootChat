@@ -5,9 +5,8 @@ import SimbirSoftProject.dto.RoomViewDto;
 import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.exceptions.UserBlockedException;
-import SimbirSoftProject.model.Room;
-import SimbirSoftProject.model.RoomType;
 import SimbirSoftProject.mapper.RoomMapper;
+import SimbirSoftProject.model.Room;
 import SimbirSoftProject.model.User;
 import SimbirSoftProject.repository.RoomRepository;
 import SimbirSoftProject.repository.UserRepository;
@@ -15,6 +14,7 @@ import SimbirSoftProject.service.interfaces.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,8 +28,8 @@ public class RoomServiceImpl implements RoomService {
     private final UserRepository userRepository;
     @Override
     public void createRoom(RoomDto roomDto, User user) {
-        boolean UserBlocked = user.isBlocked();
-        if (UserBlocked){
+        boolean isUserBlocked = user.isBlocked();
+        if (isUserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
             throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
         }
         Room roomToCreate = new Room();
@@ -70,7 +70,7 @@ public class RoomServiceImpl implements RoomService {
             throw new ResourceNotFoundException("User with login" + userToAddDto.getLogin() + "not found", "user login");
         }
         boolean UserBlocked = user.isBlocked();
-        if (UserBlocked){
+        if (UserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
             throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
         }
         Room room = roomRepository.getById(id);
@@ -85,7 +85,7 @@ public class RoomServiceImpl implements RoomService {
             throw new ResourceNotFoundException("User with login" + userToAddDto.getLogin() + "not found", "user login");
         }
         boolean UserBlocked = user.isBlocked();
-        if (UserBlocked){
+        if (UserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
             throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
         }
         Room room = roomRepository.getById(id);

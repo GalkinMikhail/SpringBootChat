@@ -1,6 +1,7 @@
 package SimbirSoftProject.service.interfaces;
 
 import SimbirSoftProject.dto.RegistrationDto;
+import SimbirSoftProject.dto.UserBlockDto;
 import SimbirSoftProject.dto.UserDto;
 import SimbirSoftProject.model.User;
 
@@ -18,7 +19,7 @@ public interface UserService {
 
     User findByLogin(String login);
 
-    void blockUser(Long id);
+    void blockUser(Long id, UserBlockDto userBlockDto);
 
     void unBlockUser(Long id);
 

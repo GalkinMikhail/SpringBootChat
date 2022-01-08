@@ -2,6 +2,7 @@ package SimbirSoftProject.controller;
 
 
 import SimbirSoftProject.dto.RegistrationDto;
+import SimbirSoftProject.dto.UserBlockDto;
 import SimbirSoftProject.dto.UserDto;
 import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.service.interfaces.UserService;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -58,12 +58,12 @@ public class UserController {
     }
     @PreAuthorize("hasAuthority('ROLE_MODERATOR') OR hasAuthority('ROLE_ADMIN')")
     @PostMapping("/block/{id}")
-    public ResponseEntity<String> blockUser(@PathVariable Long id){
+    public ResponseEntity<String> blockUser(@RequestBody UserBlockDto userBlockDto, @PathVariable Long id){
         UserDto userDto = this.userService.getUserById(id);
         if (userDto == null){
             throw new ResourceNotFoundException("User with id " + id + "not found", "user id");
         }
-        this.userService.blockUser(id);
+        this.userService.blockUser(id,userBlockDto);
         return new ResponseEntity<>("User successfully blocked", HttpStatus.OK);
     }
     @PreAuthorize("hasAuthority('ROLE_MODERATOR') OR hasAuthority('ROLE_ADMIN')")

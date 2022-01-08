@@ -1,14 +1,13 @@
 package SimbirSoftProject.dto;
 
-import java.util.Date;
-import java.util.Set;
-
-import SimbirSoftProject.model.Role;
-import SimbirSoftProject.model.Room;
-import SimbirSoftProject.model.User;
 import SimbirSoftProject.mapper.UserMapper;
+import SimbirSoftProject.model.Role;
+import SimbirSoftProject.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,8 +23,8 @@ public class UserDto {
     private Set<Role> roles;
     private boolean isUserOnline;
     private boolean isBlocked;
-    private Date blockDate;
-    private Date blockingDuration;
+    private LocalDateTime blockDate;
+    private Long blockingDurationInMinutes;
 
     public User userDtoToUser(UserDto newUser){
         return UserMapper.USER_MAPPER.userDtoToUser(newUser);

@@ -6,26 +6,18 @@ import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.exceptions.UserBlockedException;
 import SimbirSoftProject.model.Role;
-import SimbirSoftProject.model.Room;
 import SimbirSoftProject.model.User;
 import SimbirSoftProject.security.SecurityUser;
-import SimbirSoftProject.security.UserDetailsServiceImpl;
 import SimbirSoftProject.service.interfaces.RoomService;
 import SimbirSoftProject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @RestController
@@ -41,9 +33,6 @@ public class RoomController {
         SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String login = myUser.getLogin();
         User user = userService.findByLogin(login);
-        if (user == null){
-            throw new ResourceNotFoundException("нет",".ptj");
-        }
         if (roomDto == null){
             throw new ResourceNotFoundException("Failed to create the room", "room name,room type");
         }

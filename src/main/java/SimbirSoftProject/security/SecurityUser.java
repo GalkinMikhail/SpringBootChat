@@ -1,16 +1,13 @@
 package SimbirSoftProject.security;
 
-import SimbirSoftProject.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 @AllArgsConstructor
 public class SecurityUser implements UserDetails {
@@ -28,9 +25,9 @@ public class SecurityUser implements UserDetails {
     @Getter
     private final boolean isBlocked;
     @Getter
-    private final Date blockDate;
+    private final LocalDateTime blockDate;
     @Getter
-    private final Date blockingDuration;
+    private final Long blockingDurationInMinutes;
     private final Collection<? extends GrantedAuthority> authorities;
 
     @Override

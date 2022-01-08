@@ -1,13 +1,15 @@
 package SimbirSoftProject.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -52,15 +54,13 @@ public class User {
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "block_date")
-    private Date blockDate;
+    @Column(name = "last_block_date")
+    private LocalDateTime blockDate;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "blocking_duration")
-    private Date blockingDuration;
+    @Column(name = "last_blocking_duration_minutes")
+    private Long blockingDurationInMinutes;
 
-    public User(String login, String password, String firstName, String lastName, boolean isUserOnline, boolean isBlocked, Date blockDate, Date blockingDuration) {
+    public User(String login, String password, String firstName, String lastName, boolean isUserOnline, boolean isBlocked, LocalDateTime blockDate, Long blockingDuration) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -68,6 +68,6 @@ public class User {
         this.isUserOnline = isUserOnline;
         this.isBlocked = isBlocked;
         this.blockDate = blockDate;
-        this.blockingDuration = blockingDuration;
+        this.blockingDurationInMinutes = blockingDuration;
     }
 }

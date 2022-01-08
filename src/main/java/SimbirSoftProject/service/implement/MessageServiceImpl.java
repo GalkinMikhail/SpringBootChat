@@ -14,6 +14,7 @@ import SimbirSoftProject.service.interfaces.MessagesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class MessageServiceImpl implements MessagesService {
             throw new ResourceNotFoundException("Room not found","room id");
         }
         boolean UserBlocked = user.isBlocked();
-        if (UserBlocked){
+        if (UserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
             throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
         }
         Messages messagesToSend = Messages.builder()
@@ -53,7 +54,7 @@ public class MessageServiceImpl implements MessagesService {
         Messages messages = messageRepository.getById(id);
         User user = messages.getAuthor();
         boolean UserBlocked = user.isBlocked();
-        if (UserBlocked){
+        if (UserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
             throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
         }
         messageRepository.deleteById(id);

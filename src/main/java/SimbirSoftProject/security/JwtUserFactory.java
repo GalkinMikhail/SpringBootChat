@@ -23,7 +23,7 @@ public final class JwtUserFactory {
                 user.isUserOnline(),
                 user.isBlocked(),
                 user.getBlockDate(),
-                user.getBlockingDuration(),
+                user.getBlockingDurationInMinutes(),
                 mapToGrantedAuthorities(new ArrayList<>(user.getRoles()))
         );
     }

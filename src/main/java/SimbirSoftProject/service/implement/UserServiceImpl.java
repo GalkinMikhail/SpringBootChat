@@ -1,26 +1,19 @@
 package SimbirSoftProject.service.implement;
 
 import SimbirSoftProject.dto.RegistrationDto;
+import SimbirSoftProject.dto.UserBlockDto;
 import SimbirSoftProject.dto.UserDto;
-import SimbirSoftProject.exceptions.ResourceNotFoundException;
+import SimbirSoftProject.mapper.UserMapper;
 import SimbirSoftProject.model.Role;
 import SimbirSoftProject.model.User;
-import SimbirSoftProject.exceptions.PersistenceLayerException;
-import SimbirSoftProject.mapper.UserMapper;
 import SimbirSoftProject.repository.RoleRepository;
 import SimbirSoftProject.repository.UserRepository;
 import SimbirSoftProject.service.interfaces.UserService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,10 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(Long id) {
+    public void blockUser(Long id, UserBlockDto userBlockDto) {
         User user = userRepository.getById(id);
         user.setBlocked(true);
-        user.setBlockDate(new Date());
+        user.setBlockDate(LocalDateTime.now());
+        user.setBlockingDurationInMinutes(userBlockDto.getBlockTime());
         userRepository.save(user);
     }
 
@@ -79,7 +73,6 @@ public class UserServiceImpl implements UserService {
     public void unBlockUser(Long id) {
         User user = userRepository.getById(id);
         user.setBlocked(false);
-        user.setBlockDate(null);
         userRepository.save(user);
     }
 
