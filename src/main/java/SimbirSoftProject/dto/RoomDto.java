@@ -1,9 +1,8 @@
 package SimbirSoftProject.dto;
 
+import SimbirSoftProject.mapper.RoomMapper;
 import SimbirSoftProject.model.Room;
 import SimbirSoftProject.model.RoomType;
-import SimbirSoftProject.model.User;
-import SimbirSoftProject.mapper.RoomMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

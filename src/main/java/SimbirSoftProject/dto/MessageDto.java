@@ -1,9 +1,7 @@
 package SimbirSoftProject.dto;
 
-import SimbirSoftProject.model.Messages;
-import SimbirSoftProject.model.Room;
-import SimbirSoftProject.model.User;
 import SimbirSoftProject.mapper.MessageMapper;
+import SimbirSoftProject.model.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

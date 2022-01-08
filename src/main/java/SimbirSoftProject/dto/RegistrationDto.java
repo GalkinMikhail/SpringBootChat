@@ -1,10 +1,8 @@
 package SimbirSoftProject.dto;
 
-import SimbirSoftProject.model.Role;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

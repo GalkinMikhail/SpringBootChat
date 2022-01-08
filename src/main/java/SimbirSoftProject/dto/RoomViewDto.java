@@ -1,6 +1,5 @@
 package SimbirSoftProject.dto;
 
-import SimbirSoftProject.model.Room;
 import SimbirSoftProject.model.RoomType;
 import SimbirSoftProject.model.User;
 import lombok.AllArgsConstructor;
