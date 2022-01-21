@@ -1,6 +1,7 @@
 package SimbirSoftProject.controller;
 
 import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.dto.RoomRenameDto;
 import SimbirSoftProject.dto.RoomViewDto;
 import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.exceptions.ResourceNotFoundException;
@@ -91,25 +92,11 @@ public class RoomController {
         if (roomViewDto == null){
             throw new ResourceNotFoundException("Room with id " + id + "not found", "room id");
         }
-        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String login = myUser.getLogin();
-        User user = userService.findByLogin(login);
-        boolean isAdmin = false;
-        Set<Role> userRoles = user.getRoles();
-        for (Role role : userRoles){
-            if (role.getName().equals("ROLE_ADMIN")) {
-                isAdmin = true;
-                break;
-            }
-        }
-        if (!user.getLogin().equals(roomViewDto.getOwner().getLogin()) && !isAdmin){
-            throw new AccessDeniedException("You have no permission to delete participants from this room");
-        }
         this.roomService.deleteParticipant(userToAddDto,id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @PostMapping("/rename/{id}")
-    public ResponseEntity<String> renameRoom(@RequestBody RoomDto roomDto, @PathVariable Long id){
+    public ResponseEntity<String> renameRoom(@RequestBody RoomRenameDto roomRenameDto, @PathVariable Long id){
         SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String login = myUser.getLogin();
         User user = userService.findByLogin(login);
@@ -132,7 +119,7 @@ public class RoomController {
         if (!user.getLogin().equals(roomViewDto.getOwner().getLogin()) && !isAdmin){
             throw new AccessDeniedException("You have no permission to rename this room");
         }
-        this.roomService.renameRoom(roomDto,id);
+        this.roomService.renameRoom(roomRenameDto,id);
         return new ResponseEntity<>("Room renamed successfully", HttpStatus.OK);
     }
 }

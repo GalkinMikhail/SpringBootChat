@@ -1,6 +1,7 @@
 package SimbirSoftProject.service.interfaces;
 
 import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.dto.RoomRenameDto;
 import SimbirSoftProject.dto.RoomViewDto;
 import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.model.User;
@@ -15,5 +16,5 @@ public interface RoomService {
     void deleteRoomById(Long id);
     void addParticipant(UserToAddDto userToAddDto, Long id);
     void deleteParticipant(UserToAddDto userToAddDto, Long id);
-    void renameRoom(RoomDto roomDto, Long id);
+    void renameRoom(RoomRenameDto roomRenameDto, Long id);
 }

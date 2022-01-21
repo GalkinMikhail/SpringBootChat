@@ -1,17 +1,22 @@
 package SimbirSoftProject.service.implement;
 
 import SimbirSoftProject.dto.RoomDto;
+import SimbirSoftProject.dto.RoomRenameDto;
 import SimbirSoftProject.dto.RoomViewDto;
 import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.exceptions.ResourceNotFoundException;
 import SimbirSoftProject.exceptions.UserBlockedException;
 import SimbirSoftProject.mapper.RoomMapper;
+import SimbirSoftProject.model.Role;
 import SimbirSoftProject.model.Room;
 import SimbirSoftProject.model.User;
 import SimbirSoftProject.repository.RoomRepository;
 import SimbirSoftProject.repository.UserRepository;
+import SimbirSoftProject.security.SecurityUser;
 import SimbirSoftProject.service.interfaces.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -60,6 +65,21 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoomById(Long id) {
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User currentUser = userRepository.findByLogin(login);
+        Room room = roomRepository.getById(id);
+        boolean isAdmin = false;
+        Set<Role> userRoles = currentUser.getRoles();
+        for (Role role : userRoles){
+            if (role.getName().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (!currentUser.getLogin().equals(room.getCreatorId().getLogin()) && !isAdmin){
+            throw new AccessDeniedException("You have no permission to delete this room");
+        }
         roomRepository.deleteById(id);
     }
 
@@ -81,14 +101,28 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteParticipant(UserToAddDto userToAddDto, Long id) {
         User user = userRepository.findByLogin(userToAddDto.getLogin());
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User currentUser = userRepository.findByLogin(login);
         if (user == null){
             throw new ResourceNotFoundException("User with login" + userToAddDto.getLogin() + "not found", "user login");
         }
-        boolean UserBlocked = user.isBlocked();
-        if (UserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
+        boolean UserBlocked = currentUser.isBlocked();
+        if (UserBlocked && !currentUser.getBlockDate().plusMinutes(currentUser.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
             throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
         }
         Room room = roomRepository.getById(id);
+        boolean isAdmin = false;
+        Set<Role> userRoles = currentUser.getRoles();
+        for (Role role : userRoles){
+            if (role.getName().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (!currentUser.getLogin().equals(room.getCreatorId().getLogin()) && !isAdmin){
+            throw new AccessDeniedException("You have no permission to delete participants from this room");
+        }
         Set<User> listParticipants = room.getParticipants();
         if (!listParticipants.contains(user)){
             throw new ResourceNotFoundException("User is not a member of this room", "room participants");
@@ -99,9 +133,27 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void renameRoom(RoomDto roomDto, Long id) {
+    public void renameRoom(RoomRenameDto roomRenameDto, Long id) {
         Room room = roomRepository.getById(id);
-        room.setName(roomDto.getName());
+        SecurityUser myUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = myUser.getLogin();
+        User currentUser = userRepository.findByLogin(login);
+        boolean UserBlocked = currentUser.isBlocked();
+        if (UserBlocked && !currentUser.getBlockDate().plusMinutes(currentUser.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
+            throw new UserBlockedException("User " + currentUser.getLogin() + " is blocked","user blocked");
+        }
+        boolean isAdmin = false;
+        Set<Role> userRoles = currentUser.getRoles();
+        for (Role role : userRoles){
+            if (role.getName().equals("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (!currentUser.getLogin().equals(room.getCreatorId().getLogin()) && !isAdmin) {
+            throw new AccessDeniedException("You have no permission to rename this room");
+        }
+        room.setName(roomRenameDto.getName());
         roomRepository.save(room);
     }
 

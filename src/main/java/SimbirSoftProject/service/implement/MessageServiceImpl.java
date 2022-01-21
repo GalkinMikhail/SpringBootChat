@@ -31,9 +31,10 @@ public class MessageServiceImpl implements MessagesService {
         if (!roomToSendMessage.isPresent()) {
             throw new ResourceNotFoundException("Room not found","room id");
         }
+
         boolean UserBlocked = user.isBlocked();
         if (UserBlocked && !user.getBlockDate().plusMinutes(user.getBlockingDurationInMinutes()).isBefore(LocalDateTime.now())){
-            throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked");
+            throw new UserBlockedException("User " + user.getLogin() + " is blocked","user blocked"); // сделать вывод остатка блокировки
         }
         Messages messagesToSend = Messages.builder()
                 .content(messageDto.getContent())

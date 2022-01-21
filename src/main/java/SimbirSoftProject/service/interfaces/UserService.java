@@ -3,6 +3,7 @@ package SimbirSoftProject.service.interfaces;
 import SimbirSoftProject.dto.RegistrationDto;
 import SimbirSoftProject.dto.UserBlockDto;
 import SimbirSoftProject.dto.UserDto;
+import SimbirSoftProject.dto.UserToAddDto;
 import SimbirSoftProject.model.User;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface UserService {
     void setModerator(Long id);
 
     void deleteModerator(Long id);
+
+    void renameUser(UserToAddDto userToAddDto,Long id);
 }

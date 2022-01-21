@@ -3,6 +3,7 @@ package SimbirSoftProject.mapper;
 import SimbirSoftProject.dto.RoomDto;
 import SimbirSoftProject.model.Room;
 import SimbirSoftProject.model.Room.RoomBuilder;
+import SimbirSoftProject.model.RoomType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-08T15:44:56+0300",
+    date = "2022-01-21T00:18:39+0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 16.0.1 (Oracle Corporation)"
 )
 @Component
@@ -22,10 +23,13 @@ public class RoomMapperImpl implements RoomMapper {
             return null;
         }
 
-        RoomDto roomDto = new RoomDto();
+        String name = null;
+        RoomType type = null;
 
-        roomDto.setName( entity.getName() );
-        roomDto.setType( entity.getType() );
+        name = entity.getName();
+        type = entity.getType();
+
+        RoomDto roomDto = new RoomDto( name, type );
 
         return roomDto;
     }
