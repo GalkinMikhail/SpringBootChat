@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(userRoles);
         userRepository.save(user);
         Room botRoom = new Room();
-        botRoom.setName("ChatBotRoom");
+        botRoom.setName("ChatBotRoomFor"+user.getLogin());
         botRoom.setType(RoomType.PRIVATE);
         botRoom.setCreatorId(user);
         Set<User> addUserToChatBotRoom = new HashSet<>();

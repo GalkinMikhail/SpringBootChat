@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="Mikhail Galkin">
+        <createTable tableName="room">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="room_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="Mikhail Galkin">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="login" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_user_online" type="BIT(1)">
+            </column>
+            <column name="is_blocked" type="BIT(1)">
+            </column>
+            <column name="last_block_date" type="DATETIME(6)">
+            </column>
+            <column name="last_blocking_duration_minutes" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="Mikhail Galkin">
+        <createTable tableName="messages">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="messages_pkey"/>
+            </column>
+            <column name="content" type="VARCHAR(10000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="room_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="Mikhail Galkin">
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="roles_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="Mikhail Galkin">
+        <createTable tableName="room_participants">
+            <column name="room_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="room_participants_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="room_participants_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="Mikhail Galkin">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_roles_pkey"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_roles_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="Mikhail Galkin">
+        <addUniqueConstraint tableName="user" columnNames="login" constraintName="UKew1hvam8uwaknuaellwhqchhb"/>
+    </changeSet>
+    <changeSet id="8" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="room_participants" baseColumnNames="room_id" constraintName="FKd93x26glimf3l3f05ukaoi6ry" referencedTableName="room"
+                                 referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+    </changeSet>
+    <changeSet id="9" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="room_participants" baseColumnNames="user_id" constraintName="FKaacpe0be4qr67ojn05po2jmib" referencedTableName="user"
+                                 referencedColumnNames="id" onUpdate="RESTRICT" onDelete="RESTRICT"/>
+    </changeSet>
+    <changeSet id="10" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="user_id" constraintName="FK55itppkw3i07do3h7qoclqd4k" referencedTableName="user"
+                                 referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+    </changeSet>
+    <changeSet id="11" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="role_id" constraintName="FKh8ciramu9cc9q3qcqiv4ue8a6" referencedTableName="roles"
+                                 referencedColumnNames="id" onUpdate="RESTRICT" onDelete="RESTRICT"/>
+    </changeSet>
+    <changeSet id="12" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="room" baseColumnNames="creator_id" constraintName="FKisdkhsvbo7y96l64ehryi59ss" referencedTableName="user"
+                                 referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+    </changeSet>
+    <changeSet id="13" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="messages" baseColumnNames="user_id" constraintName="FK2qlxjpv0tk58347eku71n54eg" referencedTableName="user"
+                                 referencedColumnNames="id" onUpdate="RESTRICT" onDelete="RESTRICT"/>
+    </changeSet>
+    <changeSet id="14" author="Mikhail Galkin">
+        <addForeignKeyConstraint baseTableName="messages" baseColumnNames="room_id" constraintName="FKdf12wr5ae6nggahxd686scdwy" referencedTableName="room"
+                                 referencedColumnNames="id" onDelete="RESTRICT" onUpdate="RESTRICT"/>
+    </changeSet>
+</databaseChangeLog>

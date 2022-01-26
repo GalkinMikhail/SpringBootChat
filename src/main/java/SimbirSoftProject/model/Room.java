@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(max = 30, message = "Room name is too long")
