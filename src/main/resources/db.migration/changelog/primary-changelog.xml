@@ -1,0 +1,57 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet id="prm-ins" author="Mikhail Galkin">
+        <insert tableName="roles">
+            <column name="id" value="1"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="2"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="3"/>
+            <column name="name" value="ROLE_MODERATOR"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="1"/>
+            <column name="login" value="admin"/>
+            <column name="password" value="$2a$10$Yd1tWfXkz/h50cUCakUv7.MRy3X5zAEvIUxXIQp9Sj90pqc0VHHSu"/>
+            <column name="first_name" value="admin"/>
+            <column name="last_name" value="admin"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="2"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="2"/>
+            <column name="login" value="user"/>
+            <column name="password" value="$2a$10$Yd1tWfXkz/h50cUCakUv7.MRy3X5zAEvIUxXIQp9Sj90pqc0VHHSu"/>
+            <column name="first_name" value="user"/>
+            <column name="last_name" value="user"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="2"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="3"/>
+            <column name="login" value="moderator"/>
+            <column name="password" value="$2a$10$Yd1tWfXkz/h50cUCakUv7.MRy3X5zAEvIUxXIQp9Sj90pqc0VHHSu"/>
+            <column name="first_name" value="moderator"/>
+            <column name="last_name" value="moderator"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="3"/>
+            <column name="role_id" value="3"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

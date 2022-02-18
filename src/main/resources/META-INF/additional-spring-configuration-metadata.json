@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "youtube.apikey",
+      "type": "java.lang.String",
+      "description": "Description for youtube.apikey."
+  }
+] }
